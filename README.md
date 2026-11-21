@@ -19,11 +19,11 @@ Open a search result in the Google app and the toolbar’s Share button can send
 One article about Google’s old “Don’t be evil” motto, two ways to copy it. The stock Share sheet copies a `share.google` redirect. One tap with Copy Direct Link copies the article’s URL.
 
 <p align="center">
-  <a href="https://github.com/AugusDogus/copy-direct-link/releases/download/v1.0.0/copy-direct-link-demo.mp4">
+  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4">
     <img src="docs/demo.png" width="900" alt="Side-by-side comparison. Before, Android’s Share sheet copies a share.google redirect. After, one tap copies the full New York Magazine article URL.">
   </a>
   <br>
-  <a href="https://github.com/AugusDogus/copy-direct-link/releases/download/v1.0.0/copy-direct-link-demo.mp4">Watch the 10-second demo</a>
+  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4">Watch the 10-second demo</a>
 </p>
 
 ## Install
