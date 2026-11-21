@@ -6,10 +6,15 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public final class SetupActivity extends Activity {
@@ -19,11 +24,13 @@ public final class SetupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int padding = Math.round(24 * getResources().getDisplayMetrics().density);
+        ScrollView scroll = new ScrollView(this);
         LinearLayout layout = new LinearLayout(this);
+        scroll.addView(layout);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setOnApplyWindowInsetsListener((view, insets) -> {
+        scroll.setOnApplyWindowInsetsListener((view, insets) -> {
             var bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
-            view.setPadding(padding + bars.left, padding + bars.top, padding + bars.right, padding + bars.bottom);
+            layout.setPadding(padding + bars.left, padding + bars.top, padding + bars.right, padding + bars.bottom);
             return insets;
         });
 
@@ -45,7 +52,38 @@ public final class SetupActivity extends Activity {
         settings.setText(R.string.open_settings);
         settings.setOnClickListener(view -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)));
         layout.addView(settings);
-        setContentView(layout);
+
+        TextView actionLabel = new TextView(this);
+        actionLabel.setText(R.string.share_action);
+        actionLabel.setTextSize(18);
+        actionLabel.setPadding(0, padding, 0, 0);
+        layout.addView(actionLabel);
+
+        var actions = new RadioGroup(this);
+        var copy = actionOption(R.string.copy_link);
+        var share = actionOption(R.string.share_link);
+        actions.addView(copy);
+        actions.addView(share);
+        actions.check(ShareAction.load(this) == ShareAction.SHARE ? share.getId() : copy.getId());
+        actions.setOnCheckedChangeListener((group, id) -> {
+            if (id == copy.getId()) {
+                ShareAction.COPY.save(this);
+            } else if (id == share.getId()) {
+                ShareAction.SHARE.save(this);
+            }
+        });
+        layout.addView(actions);
+
+        setContentView(scroll);
+    }
+
+    private RadioButton actionOption(int label) {
+        var button = new RadioButton(this);
+        button.setId(View.generateViewId());
+        button.setText(label);
+        button.setMinimumHeight(Math.round(48 * getResources().getDisplayMetrics().density));
+        button.setLayoutParams(new RadioGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        return button;
     }
 
     @Override

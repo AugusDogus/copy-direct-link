@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.copydirectlink" android:versionCode="1" android:versionName="1.0">
+    package="dev.copydirectlink" android:versionCode="2" android:versionName="1.1.0">
     <uses-sdk android:minSdkVersion="30" android:targetSdkVersion="36" />
     <queries>
         <package android:name="com.google.android.googlequicksearchbox" />
@@ -12,6 +12,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ShareLinkActivity" android:exported="false"
+            android:excludeFromRecents="true" android:taskAffinity="" android:theme="@style/ShareLinkTheme" />
         <service android:name=".CopyLinkService" android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>

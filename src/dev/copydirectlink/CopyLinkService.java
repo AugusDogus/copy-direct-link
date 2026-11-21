@@ -149,8 +149,9 @@ public final class CopyLinkService extends AccessibilityService {
         Rect bounds = next.bounds();
         var button = new Button(this);
         button.setBackground(null);
-        button.setContentDescription(getString(R.string.copy_page_link));
-        button.setOnClickListener(view -> copyPageLink());
+        String description = getString(ShareAction.load(this).description);
+        button.setContentDescription(description);
+        button.setOnClickListener(view -> usePageLink());
 
         var params = new WindowManager.LayoutParams(bounds.width(), bounds.height(),
                 WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
@@ -161,7 +162,7 @@ public final class CopyLinkService extends AccessibilityService {
         params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
         params.x = bounds.left;
         params.y = bounds.top;
-        params.setTitle(getString(R.string.copy_page_link));
+        params.setTitle(description);
         try {
             windows.addView(button, params);
         } catch (WindowManager.BadTokenException | WindowManager.InvalidDisplayException unavailable) {
@@ -172,15 +173,20 @@ public final class CopyLinkService extends AccessibilityService {
         target = next;
     }
 
-    private void copyPageLink() {
+    private void usePageLink() {
         Target current = findTarget();
         if (target == null || current == null || target.windowId() != current.windowId()
                 || !target.bounds().equals(current.bounds())) {
             scheduleRefresh();
             return;
         }
+        ShareAction action = ShareAction.load(this);
+        long copiedAfter = System.currentTimeMillis();
         if (!current.title().performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
             Toast.makeText(this, R.string.copy_failed, Toast.LENGTH_SHORT).show();
+        } else if (action == ShareAction.SHARE) {
+            removeOverlay();
+            ShareLinkActivity.open(this, copiedAfter);
         }
     }
 

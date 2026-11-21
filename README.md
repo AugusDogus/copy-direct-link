@@ -1,25 +1,25 @@
 <div align="center">
   <img src="docs/icon.svg" alt="" width="96" height="96">
   <h1>Copy Direct Link</h1>
-  <p>Tap Share in the Google app to copy the page’s real URL. Android 11 and later, no root required.</p>
-  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=2">Play demo in 1080p60</a></p>
-  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=2">
+  <p>Tap Share in the Google app to share the page’s real URL. Android 11 and later, no root required.</p>
+  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=3">Play demo</a></p>
+  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=3">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/demo.png">
-      <img src="docs/demo.webp" width="960" alt="Both toolbar Share buttons are tapped together. Google’s share sheet copies a share.google redirect. Copy Direct Link copies the full New York Magazine URL, and Chrome opens the article from the clipboard.">
+      <img src="docs/demo.webp" width="960" alt="Both Share buttons are tapped together. The Android share sheet shows a share.google URL on the left and the direct New York Magazine URL on the right.">
     </picture>
   </a>
 </div>
 
-The demo shows the same Share tap on both sides, the two clipboard results, and Chrome opening the copied article URL. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
+The same tap opens Android’s share sheet on both sides. Google shares a `share.google` redirect. Copy Direct Link shares the full article URL. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
 
 ## Use it
 
 1. **Install.** Download `copy-direct-link.apk` from [Releases](https://github.com/AugusDogus/copy-direct-link/releases/latest) and open it on your phone.
 2. **Enable it.** Open **Copy Direct Link**, tap **Open accessibility settings**, then select **Copy Direct Link** under **Downloaded apps**. Turn on **Use Copy Direct Link** and tap **Allow**.
-3. **Copy a page link.** Open a search result in the Google app and tap **Share** in the page’s top toolbar. The full page URL is ready to paste.
+3. **Share a page link.** Open a search result in the Google app and tap **Share** in the page’s top toolbar. Android’s share sheet opens with the full page URL.
 
-The development build also has a **When you tap Share** setting. **Copy link** is the default. Choose **Share link** to open Android’s share sheet with the real URL. This mode also leaves the URL on your clipboard.
+**Share link** is the default. To copy the address in one tap, choose **Copy link** under **When you tap Share** in the app. Share link mode also leaves the URL on your clipboard.
 
 If Android shows **Restricted setting**, open **Settings → Apps → Copy Direct Link → ⋮ → Allow restricted settings**, then return to Accessibility. If you installed a debug build earlier, uninstall it before switching to the signed release and enable the service again.
 
