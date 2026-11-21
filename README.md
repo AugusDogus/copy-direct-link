@@ -22,6 +22,8 @@ Open a search result in the Google app and the toolbar’s Share button can send
 
 If Android shows **Restricted setting**, open **Settings → Apps → Copy Direct Link → ⋮ → Allow restricted settings**, then return to Accessibility. With ADB connected, you can install the APK with `adb install copy-direct-link.apk`.
 
+If you previously installed a debug build, uninstall it before installing the GitHub release, then enable the service again. Android requires the same signing key for an in-place update.
+
 ## How it works
 
 The accessibility service finds Google’s Share icon in a Chrome Custom Tab and places a transparent button over it. A tap invokes Chrome’s built-in long press on the page title. Chrome copies the full URL and keeps the page open.
