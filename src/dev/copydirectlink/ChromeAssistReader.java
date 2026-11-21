@@ -3,6 +3,7 @@ package dev.copydirectlink;
 import android.app.assist.AssistContent;
 import android.content.ComponentName;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
@@ -59,9 +60,6 @@ public final class ChromeAssistReader extends Binder {
                 return null;
             }
 
-            // This requests AssistContent alone, omitting the view hierarchy and screenshots.
-            int contentOnly = Class.forName("android.app.ActivityManager")
-                    .getField("ASSIST_CONTEXT_CONTENT").getInt(null);
             var receiverType = Class.forName(ASSIST_RECEIVER);
             var received = new ArrayBlockingQueue<Bundle>(1);
             var callback = new Binder() {
@@ -80,9 +78,21 @@ public final class ChromeAssistReader extends Binder {
             };
             var receiver = Proxy.newProxyInstance(receiverType.getClassLoader(), new Class<?>[]{receiverType},
                     (proxy, method, arguments) -> callback);
-            var request = managerType.getMethod("requestAssistContextExtras", int.class, receiverType,
-                    Bundle.class, IBinder.class, boolean.class, boolean.class);
-            if (!Boolean.TRUE.equals(request.invoke(manager, contentOnly, receiver, null, null, true, false))) {
+            // Android 17 requires a specific activity or task for assist requests.
+            Object requested;
+            if (Build.VERSION.SDK_INT >= 37) {
+                int taskId = task.getClass().getField("taskId").getInt(task);
+                var request = managerType.getMethod("requestAssistDataForTask", receiverType, int.class,
+                        String.class, String.class, boolean.class);
+                requested = request.invoke(manager, receiver, taskId, "com.android.shell", null, false);
+            } else {
+                int contentOnly = Class.forName("android.app.ActivityManager")
+                        .getField("ASSIST_CONTEXT_CONTENT").getInt(null);
+                var request = managerType.getMethod("requestAssistContextExtras", int.class, receiverType,
+                        Bundle.class, IBinder.class, boolean.class, boolean.class);
+                requested = request.invoke(manager, contentOnly, receiver, null, null, true, false);
+            }
+            if (!Boolean.TRUE.equals(requested)) {
                 return null;
             }
             return urlFromAssist(received.poll(2, TimeUnit.SECONDS));
