@@ -2,8 +2,8 @@
   <img src="docs/icon.svg" alt="" width="96" height="96">
   <h1>Copy Direct Link</h1>
   <p>Tap Share in the Google app to share the page’s real URL. Android 11 and later, no root required.</p>
-  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=6">Play demo</a></p>
-  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=6">
+  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=7">Play demo</a></p>
+  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=7">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/demo.png">
       <img src="docs/demo.webp" width="880" alt="Both Share buttons are tapped together. The Android share sheet shows a share.google URL on the left and the direct New York Magazine URL on the right.">
