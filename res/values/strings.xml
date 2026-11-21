@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Copy Direct Link</string>
+    <string name="service_description">Tap Share in the Google app’s in-app browser to copy the website address using Chrome’s built-in copy action.</string>
+    <string name="service_off">Off</string>
+    <string name="service_on">On</string>
+    <string name="open_settings">Open accessibility settings</string>
+    <string name="copy_page_link">Copy page link</string>
+    <string name="copy_failed">Chrome couldn’t copy this page. Try Copy link in the three-dot menu.</string>
+</resources>
