@@ -7,6 +7,12 @@
     <string name="share_action">When you tap Share</string>
     <string name="copy_link">Copy link</string>
     <string name="share_link">Share link</string>
+    <string name="share_with_shizuku">Share link without site info</string>
+    <string name="shizuku_start_needed">Start Shizuku to share without opening Chrome’s site info.</string>
+    <string name="shizuku_permission_needed">Allow Shizuku access in Copy Direct Link to use this mode.</string>
+    <string name="authorize_shizuku">Allow Shizuku access</string>
+    <string name="shizuku_ready">Shizuku is ready. Tap Share in the Google app to share the page address.</string>
+    <string name="shizuku_address_unavailable">Couldn’t read Chrome’s address through Shizuku. Try again or switch to Share link.</string>
     <string name="copy_page_link">Copy page link</string>
     <string name="share_page_link">Share page link</string>
     <string name="copy_failed">Chrome couldn’t copy this page. Try Copy link in the three-dot menu.</string>

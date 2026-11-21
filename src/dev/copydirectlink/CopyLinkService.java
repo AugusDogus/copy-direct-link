@@ -191,7 +191,10 @@ public final class CopyLinkService extends AccessibilityService {
             return;
         }
         ShareAction action = ShareAction.load(this);
-        if (action == ShareAction.SHARE) {
+        if (action == ShareAction.SHIZUKU) {
+            pageLinkShare.openShizuku(current.root());
+            removeOverlay();
+        } else if (action == ShareAction.SHARE) {
             pageLinkShare.open(current.root());
             removeOverlay();
         } else if (!current.title().performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {

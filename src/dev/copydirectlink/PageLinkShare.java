@@ -19,6 +19,7 @@ final class PageLinkShare {
     private final CopyLinkService service;
     private final Handler handler;
     private Request pending;
+    private ShizukuLinkReader shizukuReader;
 
     private record Request(int tabWindowId, long deadline) {}
 
@@ -44,6 +45,41 @@ final class PageLinkShare {
     void cancel() {
         handler.removeCallbacksAndMessages(this);
         pending = null;
+        if (shizukuReader != null) {
+            shizukuReader.close();
+            shizukuReader = null;
+        }
+    }
+
+    void openShizuku(AccessibilityNodeInfo tab) {
+        if (!ShizukuLinkReader.authorized()) {
+            fail(R.string.shizuku_permission_needed);
+            return;
+        }
+        var request = new Request(tab.getWindowId(), SystemClock.uptimeMillis() + TIMEOUT_MS);
+        pending = request;
+        handler.postDelayed(() -> fail(R.string.shizuku_address_unavailable), this, TIMEOUT_MS);
+        shizukuReader = new ShizukuLinkReader(service, handler, address -> shareShizukuAddress(request, address));
+        shizukuReader.start();
+    }
+
+    private void shareShizukuAddress(Request request, String address) {
+        if (pending != request) {
+            return;
+        }
+        var root = activeRoot();
+        if (root == null || root.getWindowId() != request.tabWindowId()
+                || findView(root, "title_url_container") == null) {
+            cancel();
+            service.refreshAfterShare();
+            return;
+        }
+        String url = webAddress(address);
+        if (url == null) {
+            fail(R.string.shizuku_address_unavailable);
+        } else {
+            showChooser(url);
+        }
     }
 
     private void awaitSiteInfo() {
@@ -94,6 +130,10 @@ final class PageLinkShare {
             retry(() -> awaitTab(url, panelWindowId));
             return;
         }
+        showChooser(url);
+    }
+
+    private void showChooser(String url) {
         cancel();
         var send = new Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, url);
         try {

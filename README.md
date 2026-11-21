@@ -11,7 +11,7 @@
   </a>
 </div>
 
-The same tap opens Android’s share sheet on both sides. Google shares a `share.google` redirect. Copy Direct Link shares the full article URL. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
+The demo shows the standalone **Share link** mode. Google shares a `share.google` redirect. Copy Direct Link shares the full article URL. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
 
 ## Use it
 
@@ -20,6 +20,8 @@ The same tap opens Android’s share sheet on both sides. Google shares a `share
 3. **Share a page link.** Open a search result in the Google app and tap **Share** in the page’s top toolbar. Android’s share sheet opens with the full page URL.
 
 **Share link** is the default. To copy the address in one tap, choose **Copy link** under **When you tap Share** in the app.
+
+To open the share sheet without the site info popup, start Shizuku, select **Share link without site info**, and tap **Allow Shizuku access**. This mode requires Android 12 or later and Shizuku running. [Shizuku setup](https://shizuku.rikka.app/guide/setup/)
 
 If Android shows **Restricted setting**, open **Settings → Apps → Copy Direct Link → ⋮ → Allow restricted settings**, then return to Accessibility. If you installed a debug build earlier, uninstall it before switching to the signed release and enable the service again.
 
@@ -32,6 +34,8 @@ Copy Direct Link works when the Google app opens a result in a Chrome Custom Tab
 
 Copy Direct Link’s accessibility service finds the Share button in the Custom Tab toolbar and places a transparent button over it. In Share link mode, the app briefly opens Chrome’s site info to read the full address, then sends it to Android’s share sheet. Copy link uses Chrome’s built-in copy action, the same one you get by holding the page title.
 
+In **Share link without site info** mode, the app asks Android for Chrome’s current address when you tap Share. The request uses Chrome’s assist content without capturing a screenshot or reading its view hierarchy.
+
 The app has no network permission. Turn off its accessibility service to restore the original Share button behavior.
 
 </details>
@@ -39,5 +43,7 @@ The app has no network permission. Turn off its accessibility service to restore
 ## Build
 
 With JDK 17 or later, Android SDK Platform 36, and Build Tools 36.0.0 installed, set `ANDROID_HOME` or `ANDROID_SDK_ROOT` and run `./build.sh`. The debug-signed APK is at `dist/copy-direct-link.apk`.
+
+The build downloads the checksum-pinned Shizuku API dependencies. [Shizuku API license](assets/shizuku-api-license.txt)
 
 GitHub Actions builds development APKs for pull requests and pushes to `main`. Pushing a version tag publishes a signed release APK. [Build workflow](https://github.com/AugusDogus/copy-direct-link/actions/workflows/android.yml)

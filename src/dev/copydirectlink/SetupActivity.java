@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -17,8 +18,20 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import rikka.shizuku.Shizuku;
+
 public final class SetupActivity extends Activity {
+    private static final int SHIZUKU_PERMISSION_REQUEST = 1;
+    private final Shizuku.OnBinderReceivedListener binderReceived = this::updateShizukuStatus;
+    private final Shizuku.OnBinderDeadListener binderDead = this::updateShizukuStatus;
+    private final Shizuku.OnRequestPermissionResultListener permissionResult = (request, result) -> {
+        if (request == SHIZUKU_PERMISSION_REQUEST) {
+            updateShizukuStatus();
+        }
+    };
     private TextView status;
+    private TextView shizukuStatus;
+    private Button authorizeShizuku;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,27 +73,51 @@ public final class SetupActivity extends Activity {
         layout.addView(actionLabel);
 
         var actions = new RadioGroup(this);
-        var copy = actionOption(R.string.copy_link);
-        var share = actionOption(R.string.share_link);
-        actions.addView(copy);
-        actions.addView(share);
-        actions.check(ShareAction.load(this) == ShareAction.SHARE ? share.getId() : copy.getId());
+        ShareAction selected = ShareAction.load(this);
+        for (ShareAction action : ShareAction.values()) {
+            if (action == ShareAction.SHIZUKU && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                continue;
+            }
+            var option = actionOption(action);
+            actions.addView(option);
+            if (action == selected) {
+                actions.check(option.getId());
+            }
+        }
         actions.setOnCheckedChangeListener((group, id) -> {
-            if (id == copy.getId()) {
-                ShareAction.COPY.save(this);
-            } else if (id == share.getId()) {
-                ShareAction.SHARE.save(this);
+            View option = group.findViewById(id);
+            if (option != null && option.getTag() instanceof ShareAction action) {
+                action.save(this);
+                updateShizukuStatus();
             }
         });
         layout.addView(actions);
 
+        shizukuStatus = new TextView(this);
+        layout.addView(shizukuStatus);
+        authorizeShizuku = new Button(this);
+        authorizeShizuku.setText(R.string.authorize_shizuku);
+        authorizeShizuku.setOnClickListener(view -> {
+            if (Shizuku.pingBinder()) {
+                try {
+                    Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST);
+                } catch (IllegalStateException unavailable) {
+                    updateShizukuStatus();
+                }
+            }
+        });
+        layout.addView(authorizeShizuku);
         setContentView(scroll);
+        Shizuku.addBinderReceivedListenerSticky(binderReceived);
+        Shizuku.addBinderDeadListener(binderDead);
+        Shizuku.addRequestPermissionResultListener(permissionResult);
     }
 
-    private RadioButton actionOption(int label) {
+    private RadioButton actionOption(ShareAction action) {
         var button = new RadioButton(this);
         button.setId(View.generateViewId());
-        button.setText(label);
+        button.setText(action.label);
+        button.setTag(action);
         button.setMinimumHeight(Math.round(48 * getResources().getDisplayMetrics().density));
         button.setLayoutParams(new RadioGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         return button;
@@ -97,5 +134,26 @@ public final class SetupActivity extends Activity {
                     return component.equals(new ComponentName(service.packageName, service.name));
                 });
         status.setText(enabled ? R.string.service_on : R.string.service_off);
+        updateShizukuStatus();
+    }
+
+    private void updateShizukuStatus() {
+        boolean selected = ShareAction.load(this) == ShareAction.SHIZUKU;
+        shizukuStatus.setVisibility(selected ? View.VISIBLE : View.GONE);
+        boolean running = selected && Shizuku.pingBinder();
+        boolean authorized = running && ShizukuLinkReader.authorized();
+        authorizeShizuku.setVisibility(running && !authorized ? View.VISIBLE : View.GONE);
+        if (selected) {
+            shizukuStatus.setText(authorized ? R.string.shizuku_ready
+                    : running ? R.string.shizuku_permission_needed : R.string.shizuku_start_needed);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        Shizuku.removeBinderReceivedListener(binderReceived);
+        Shizuku.removeBinderDeadListener(binderDead);
+        Shizuku.removeRequestPermissionResultListener(permissionResult);
+        super.onDestroy();
     }
 }
