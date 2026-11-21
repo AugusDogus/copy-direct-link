@@ -2,11 +2,16 @@
   <img src="docs/icon.svg" alt="" width="96" height="96">
   <h1>Copy Direct Link</h1>
   <p>Tap Share in the Google app to copy the page’s real URL. Android 11 and later, no root required.</p>
-  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4">Play demo in 1080p60</a></p>
-  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4"><img src="docs/demo.svg" width="960" alt="Two taps in Google’s Share sheet copy a share.google redirect. One tap with Copy Direct Link copies the full New York Magazine article URL. Play the 10-second demo."></a>
+  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=2">Play demo in 1080p60</a></p>
+  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=2">
+    <picture>
+      <source media="(prefers-reduced-motion: reduce)" srcset="docs/demo.png">
+      <img src="docs/demo.webp" width="960" alt="Both toolbar Share buttons are tapped together. Google’s share sheet copies a share.google redirect. Copy Direct Link copies the full New York Magazine URL, and Chrome opens the article from the clipboard.">
+    </picture>
+  </a>
 </div>
 
-The demo compares both ways to share the same article about Google’s old “Don’t be evil” motto. The links shown are the ones each tap sequence actually puts on the clipboard. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
+The demo shows the same Share tap on both sides, the two clipboard results, and Chrome opening the copied article URL. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
 
 ## Use it
 
