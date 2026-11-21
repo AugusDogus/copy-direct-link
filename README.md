@@ -2,8 +2,8 @@
   <img src="docs/icon.svg" alt="" width="96" height="96">
   <h1>Copy Direct Link</h1>
   <p>Tap Share in the Google app to share the page’s real URL. Android 11 and later, no root required.</p>
-  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=5">Play demo</a></p>
-  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=5">
+  <p><a href="https://github.com/AugusDogus/copy-direct-link/releases/latest">Download APK</a> · <a href="#use-it">Get started</a> · <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=6">Play demo</a></p>
+  <a href="https://augusdogus.github.io/copy-direct-link/copy-direct-link-demo.mp4?v=6">
     <picture>
       <source media="(prefers-reduced-motion: reduce)" srcset="docs/demo.png">
       <img src="docs/demo.webp" width="880" alt="Both Share buttons are tapped together. The Android share sheet shows a share.google URL on the left and the direct New York Magazine URL on the right.">
@@ -11,7 +11,7 @@
   </a>
 </div>
 
-Google shares a `share.google` redirect. With **Share link without site info** selected, Copy Direct Link opens Android’s share sheet with the full article URL. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
+The demo compares Google’s `share.google` redirect with the full article URL shared by **Share link without site info**. [New York Magazine article](https://nymag.com/intelligencer/2018/05/google-changes-motto-from-dont-be-evil-to-be-skynet.html)
 
 ## Use it
 
