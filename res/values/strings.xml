@@ -10,6 +10,6 @@
     <string name="copy_page_link">Copy page link</string>
     <string name="share_page_link">Share page link</string>
     <string name="copy_failed">Chrome couldn’t copy this page. Try Copy link in the three-dot menu.</string>
-    <string name="share_link_unavailable">Couldn’t find a fresh page link to share. Try Copy link in the three-dot menu.</string>
-    <string name="share_sheet_unavailable">Android couldn’t open the share sheet. The page link is on your clipboard.</string>
+    <string name="share_link_unavailable">Couldn’t read this page’s address. Try Copy link in the three-dot menu.</string>
+    <string name="share_sheet_unavailable">Android couldn’t open the share sheet. Try Copy link in the three-dot menu.</string>
 </resources>

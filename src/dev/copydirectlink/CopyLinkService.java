@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public final class CopyLinkService extends AccessibilityService {
-    private static final String CHROME = "com.android.chrome";
+    static final String CHROME = "com.android.chrome";
     private static final String GOOGLE = "com.google.android.googlequicksearchbox";
     private static final String SHARE_LINK = "Share link";
     private static final String TAG = "CopyDirectLink";
@@ -27,12 +27,17 @@ public final class CopyLinkService extends AccessibilityService {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable refresh = this::refreshOverlay;
+    private final PageLinkShare pageLinkShare = new PageLinkShare(this, handler);
     private WindowManager windows;
     private Button overlay;
     private Target target;
     private String shareLabel = SHARE_LINK;
 
-    private record Target(int windowId, Rect bounds, AccessibilityNodeInfo title) {}
+    private record Target(AccessibilityNodeInfo root, Rect bounds, AccessibilityNodeInfo title) {
+        int windowId() {
+            return root.getWindowId();
+        }
+    }
 
     @Override
     protected void onServiceConnected() {
@@ -54,6 +59,7 @@ public final class CopyLinkService extends AccessibilityService {
         CharSequence source = event.getPackageName();
         if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED && source != null
                 && !TextUtils.equals(CHROME, source) && !TextUtils.equals(getPackageName(), source)) {
+            pageLinkShare.cancel();
             removeOverlay();
             return;
         }
@@ -65,6 +71,7 @@ public final class CopyLinkService extends AccessibilityService {
     @Override
     public void onInterrupt() {
         handler.removeCallbacks(refresh);
+        pageLinkShare.cancel();
         removeOverlay();
     }
 
@@ -112,7 +119,7 @@ public final class CopyLinkService extends AccessibilityService {
             return null;
         }
         Rect bounds = findShareBounds(root);
-        return bounds == null ? null : new Target(root.getWindowId(), bounds, title);
+        return bounds == null ? null : new Target(root, bounds, title);
     }
 
     private Rect findShareBounds(AccessibilityNodeInfo root) {
@@ -136,6 +143,9 @@ public final class CopyLinkService extends AccessibilityService {
     }
 
     private void refreshOverlay() {
+        if (pageLinkShare.isPending()) {
+            return;
+        }
         Target next = findTarget();
         if (next == null) {
             removeOverlay();
@@ -181,13 +191,16 @@ public final class CopyLinkService extends AccessibilityService {
             return;
         }
         ShareAction action = ShareAction.load(this);
-        long copiedAfter = System.currentTimeMillis();
-        if (!current.title().performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
-            Toast.makeText(this, R.string.copy_failed, Toast.LENGTH_SHORT).show();
-        } else if (action == ShareAction.SHARE) {
+        if (action == ShareAction.SHARE) {
+            pageLinkShare.open(current.root());
             removeOverlay();
-            ShareLinkActivity.open(this, copiedAfter);
+        } else if (!current.title().performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
+            Toast.makeText(this, R.string.copy_failed, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    void refreshAfterShare() {
+        scheduleRefresh();
     }
 
     private void removeOverlay() {
